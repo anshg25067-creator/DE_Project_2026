@@ -1,0 +1,39 @@
+=== R13 run 1 ===
+Index Scan using idx_messages_chat_sent_at on messages m  (cost=0.43..647356.79 rows=2 width=44) (actual time=0.175..0.175 rows=0 loops=1)
+  Index Cond: (chat_id = 20501)
+  Filter: ((body ~~ '%?%'::text) AND (NOT (ANY (message_id = (SubPlan 1).col1))))
+  Rows Removed by Filter: 3
+  Buffers: shared hit=5 read=4
+  SubPlan 1
+    ->  Materialize  (cost=0.00..74911.00 rows=2400000 width=8) (never executed)
+          ->  Seq Scan on messages r  (cost=0.00..53536.00 rows=2400000 width=8) (never executed)
+Planning:
+  Buffers: shared hit=163
+Planning Time: 0.307 ms
+Execution Time: 0.198 ms
+=== R13 run 2 ===
+Index Scan using idx_messages_chat_sent_at on messages m  (cost=0.43..647356.79 rows=2 width=44) (actual time=0.011..0.011 rows=0 loops=1)
+  Index Cond: (chat_id = 20501)
+  Filter: ((body ~~ '%?%'::text) AND (NOT (ANY (message_id = (SubPlan 1).col1))))
+  Rows Removed by Filter: 3
+  Buffers: shared hit=9
+  SubPlan 1
+    ->  Materialize  (cost=0.00..74911.00 rows=2400000 width=8) (never executed)
+          ->  Seq Scan on messages r  (cost=0.00..53536.00 rows=2400000 width=8) (never executed)
+Planning:
+  Buffers: shared hit=163
+Planning Time: 0.280 ms
+Execution Time: 0.032 ms
+=== R13 run 3 ===
+Index Scan using idx_messages_chat_sent_at on messages m  (cost=0.43..647356.79 rows=2 width=44) (actual time=0.010..0.010 rows=0 loops=1)
+  Index Cond: (chat_id = 20501)
+  Filter: ((body ~~ '%?%'::text) AND (NOT (ANY (message_id = (SubPlan 1).col1))))
+  Rows Removed by Filter: 3
+  Buffers: shared hit=9
+  SubPlan 1
+    ->  Materialize  (cost=0.00..74911.00 rows=2400000 width=8) (never executed)
+          ->  Seq Scan on messages r  (cost=0.00..53536.00 rows=2400000 width=8) (never executed)
+Planning:
+  Buffers: shared hit=163
+Planning Time: 0.260 ms
+Execution Time: 0.029 ms

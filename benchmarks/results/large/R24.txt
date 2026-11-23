@@ -1,0 +1,48 @@
+=== R24 run 1 ===
+Sort  (cost=86476.69..86605.94 rows=51700 width=105) (actual time=256.176..256.177 rows=48 loops=1)
+  Sort Key: (count(*)) DESC
+  Sort Method: quicksort  Memory: 30kB
+  Buffers: shared hit=535218 read=17440 written=3
+  ->  GroupAggregate  (cost=0.55..79422.63 rows=51700 width=105) (actual time=11.301..256.140 rows=48 loops=1)
+        Group Key: sha256
+        Filter: (count(*) > 1)
+        Rows Removed by Filter: 485032
+        Buffers: shared hit=535215 read=17440 written=3
+        ->  Index Scan using idx_media_sha256 on media  (cost=0.55..72962.72 rows=551121 width=73) (actual time=0.013..186.171 rows=551121 loops=1)
+              Buffers: shared hit=535215 read=17440 written=3
+Planning:
+  Buffers: shared hit=147 read=10
+Planning Time: 0.499 ms
+Execution Time: 256.214 ms
+=== R24 run 2 ===
+Sort  (cost=86476.69..86605.94 rows=51700 width=105) (actual time=225.521..225.527 rows=48 loops=1)
+  Sort Key: (count(*)) DESC
+  Sort Method: quicksort  Memory: 30kB
+  Buffers: shared hit=552545 read=113
+  ->  GroupAggregate  (cost=0.55..79422.63 rows=51700 width=105) (actual time=5.765..225.491 rows=48 loops=1)
+        Group Key: sha256
+        Filter: (count(*) > 1)
+        Rows Removed by Filter: 485032
+        Buffers: shared hit=552542 read=113
+        ->  Index Scan using idx_media_sha256 on media  (cost=0.55..72962.72 rows=551121 width=73) (actual time=0.011..153.972 rows=551121 loops=1)
+              Buffers: shared hit=552542 read=113
+Planning:
+  Buffers: shared hit=148 read=9
+Planning Time: 0.368 ms
+Execution Time: 225.562 ms
+=== R24 run 3 ===
+Sort  (cost=86476.69..86605.94 rows=51700 width=105) (actual time=205.822..205.824 rows=48 loops=1)
+  Sort Key: (count(*)) DESC
+  Sort Method: quicksort  Memory: 30kB
+  Buffers: shared hit=552658
+  ->  GroupAggregate  (cost=0.55..79422.63 rows=51700 width=105) (actual time=5.345..205.800 rows=48 loops=1)
+        Group Key: sha256
+        Filter: (count(*) > 1)
+        Rows Removed by Filter: 485032
+        Buffers: shared hit=552655
+        ->  Index Scan using idx_media_sha256 on media  (cost=0.55..72962.72 rows=551121 width=73) (actual time=0.006..139.585 rows=551121 loops=1)
+              Buffers: shared hit=552655
+Planning:
+  Buffers: shared hit=157
+Planning Time: 0.209 ms
+Execution Time: 205.852 ms

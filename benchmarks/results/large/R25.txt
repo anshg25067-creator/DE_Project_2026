@@ -1,0 +1,63 @@
+=== R25 run 1 ===
+Sort  (cost=861.84..862.09 rows=101 width=60) (actual time=0.031..0.031 rows=1 loops=1)
+  Sort Key: thread.depth DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=7 read=5 dirtied=1
+  CTE thread
+    ->  Recursive Union  (cost=0.43..856.46 rows=101 width=48) (actual time=0.016..0.023 rows=1 loops=1)
+          Buffers: shared hit=4 read=5 dirtied=1
+          ->  Index Scan using messages_pkey on messages  (cost=0.43..8.45 rows=1 width=48) (actual time=0.015..0.020 rows=1 loops=1)
+                Index Cond: (message_id = 119989)
+                Buffers: shared hit=4 read=5 dirtied=1
+          ->  Nested Loop  (cost=0.43..84.70 rows=10 width=48) (actual time=0.002..0.002 rows=0 loops=1)
+                ->  WorkTable Scan on thread t  (cost=0.00..0.20 rows=10 width=12) (actual time=0.000..0.000 rows=1 loops=1)
+                ->  Index Scan using messages_pkey on messages m  (cost=0.43..8.45 rows=1 width=44) (actual time=0.000..0.000 rows=0 loops=1)
+                      Index Cond: (message_id = t.reply_to_message_id)
+  ->  CTE Scan on thread  (cost=0.00..2.02 rows=101 width=60) (actual time=0.017..0.024 rows=1 loops=1)
+        Buffers: shared hit=4 read=5 dirtied=1
+Planning:
+  Buffers: shared hit=243 read=9
+Planning Time: 0.473 ms
+Execution Time: 0.063 ms
+=== R25 run 2 ===
+Sort  (cost=861.84..862.09 rows=101 width=60) (actual time=0.027..0.028 rows=1 loops=1)
+  Sort Key: thread.depth DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=10
+  CTE thread
+    ->  Recursive Union  (cost=0.43..856.46 rows=101 width=48) (actual time=0.017..0.019 rows=1 loops=1)
+          Buffers: shared hit=7
+          ->  Index Scan using messages_pkey on messages  (cost=0.43..8.45 rows=1 width=48) (actual time=0.010..0.011 rows=1 loops=1)
+                Index Cond: (message_id = 119989)
+                Buffers: shared hit=7
+          ->  Nested Loop  (cost=0.43..84.70 rows=10 width=48) (actual time=0.002..0.002 rows=0 loops=1)
+                ->  WorkTable Scan on thread t  (cost=0.00..0.20 rows=10 width=12) (actual time=0.000..0.000 rows=1 loops=1)
+                ->  Index Scan using messages_pkey on messages m  (cost=0.43..8.45 rows=1 width=44) (actual time=0.000..0.000 rows=0 loops=1)
+                      Index Cond: (message_id = t.reply_to_message_id)
+  ->  CTE Scan on thread  (cost=0.00..2.02 rows=101 width=60) (actual time=0.018..0.020 rows=1 loops=1)
+        Buffers: shared hit=7
+Planning:
+  Buffers: shared hit=252
+Planning Time: 0.517 ms
+Execution Time: 0.064 ms
+=== R25 run 3 ===
+Sort  (cost=861.84..862.09 rows=101 width=60) (actual time=0.018..0.018 rows=1 loops=1)
+  Sort Key: thread.depth DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=10
+  CTE thread
+    ->  Recursive Union  (cost=0.43..856.46 rows=101 width=48) (actual time=0.009..0.011 rows=1 loops=1)
+          Buffers: shared hit=7
+          ->  Index Scan using messages_pkey on messages  (cost=0.43..8.45 rows=1 width=48) (actual time=0.009..0.009 rows=1 loops=1)
+                Index Cond: (message_id = 119989)
+                Buffers: shared hit=7
+          ->  Nested Loop  (cost=0.43..84.70 rows=10 width=48) (actual time=0.001..0.001 rows=0 loops=1)
+                ->  WorkTable Scan on thread t  (cost=0.00..0.20 rows=10 width=12) (actual time=0.000..0.000 rows=1 loops=1)
+                ->  Index Scan using messages_pkey on messages m  (cost=0.43..8.45 rows=1 width=44) (actual time=0.000..0.000 rows=0 loops=1)
+                      Index Cond: (message_id = t.reply_to_message_id)
+  ->  CTE Scan on thread  (cost=0.00..2.02 rows=101 width=60) (actual time=0.010..0.011 rows=1 loops=1)
+        Buffers: shared hit=7
+Planning:
+  Buffers: shared hit=252
+Planning Time: 0.417 ms
+Execution Time: 0.047 ms

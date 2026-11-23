@@ -1,0 +1,48 @@
+=== R23 run 1 ===
+Sort  (cost=24811.34..25109.80 rows=119386 width=30) (actual time=47.084..51.769 rows=139439 loops=1)
+  Sort Key: last_active_at
+  Sort Method: external merge  Disk: 5744kB
+  Buffers: shared hit=3 read=8226 written=10, temp read=718 written=720
+  ->  Bitmap Heap Scan on devices d  (cost=2213.66..11884.45 rows=119386 width=30) (actual time=5.417..26.713 rows=139439 loops=1)
+        Recheck Cond: ((last_active_at < '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND ((device_type)::text = ANY ('{WEB,DESKTOP}'::text[])))
+        Heap Blocks: exact=7851
+        Buffers: shared read=8226 written=10
+        ->  Bitmap Index Scan on idx_devices_web_desktop_last_active  (cost=0.00..2183.82 rows=119386 width=0) (actual time=4.870..4.870 rows=139439 loops=1)
+              Index Cond: (last_active_at < '2026-06-01 00:00:00+05:30'::timestamp with time zone)
+              Buffers: shared read=375
+Planning:
+  Buffers: shared hit=156 read=2
+Planning Time: 0.472 ms
+Execution Time: 57.624 ms
+=== R23 run 2 ===
+Sort  (cost=24811.34..25109.80 rows=119386 width=30) (actual time=38.945..43.438 rows=139439 loops=1)
+  Sort Key: last_active_at
+  Sort Method: external merge  Disk: 5744kB
+  Buffers: shared hit=8229, temp read=718 written=720
+  ->  Bitmap Heap Scan on devices d  (cost=2213.66..11884.45 rows=119386 width=30) (actual time=3.848..19.383 rows=139439 loops=1)
+        Recheck Cond: ((last_active_at < '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND ((device_type)::text = ANY ('{WEB,DESKTOP}'::text[])))
+        Heap Blocks: exact=7851
+        Buffers: shared hit=8226
+        ->  Bitmap Index Scan on idx_devices_web_desktop_last_active  (cost=0.00..2183.82 rows=119386 width=0) (actual time=3.335..3.335 rows=139439 loops=1)
+              Index Cond: (last_active_at < '2026-06-01 00:00:00+05:30'::timestamp with time zone)
+              Buffers: shared hit=375
+Planning:
+  Buffers: shared hit=158
+Planning Time: 0.248 ms
+Execution Time: 49.980 ms
+=== R23 run 3 ===
+Sort  (cost=24811.34..25109.80 rows=119386 width=30) (actual time=39.224..43.872 rows=139439 loops=1)
+  Sort Key: last_active_at
+  Sort Method: external merge  Disk: 5744kB
+  Buffers: shared hit=8229, temp read=718 written=720
+  ->  Bitmap Heap Scan on devices d  (cost=2213.66..11884.45 rows=119386 width=30) (actual time=3.700..19.872 rows=139439 loops=1)
+        Recheck Cond: ((last_active_at < '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND ((device_type)::text = ANY ('{WEB,DESKTOP}'::text[])))
+        Heap Blocks: exact=7851
+        Buffers: shared hit=8226
+        ->  Bitmap Index Scan on idx_devices_web_desktop_last_active  (cost=0.00..2183.82 rows=119386 width=0) (actual time=3.216..3.216 rows=139439 loops=1)
+              Index Cond: (last_active_at < '2026-06-01 00:00:00+05:30'::timestamp with time zone)
+              Buffers: shared hit=375
+Planning:
+  Buffers: shared hit=158
+Planning Time: 0.251 ms
+Execution Time: 50.792 ms

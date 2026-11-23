@@ -1,0 +1,135 @@
+=== R17 run 1 ===
+Sort  (cost=159335.98..159336.00 rows=6 width=45) (actual time=493.188..493.928 rows=6 loops=1)
+  Sort Key: (round(avg((EXTRACT(epoch FROM (r.read_at - m.sent_at)) / '60'::numeric)), 1))
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=794 read=72735
+  ->  Finalize GroupAggregate  (cost=159334.29..159335.90 rows=6 width=45) (actual time=493.174..493.921 rows=6 loops=1)
+        Group Key: m.message_type
+        Buffers: shared hit=791 read=72735
+        ->  Gather Merge  (cost=159334.29..159335.69 rows=12 width=45) (actual time=493.167..493.911 rows=18 loops=1)
+              Workers Planned: 2
+              Workers Launched: 2
+              Buffers: shared hit=791 read=72735
+              ->  Sort  (cost=158334.27..158334.28 rows=6 width=45) (actual time=490.631..490.632 rows=6 loops=3)
+                    Sort Key: m.message_type
+                    Sort Method: quicksort  Memory: 25kB
+                    Buffers: shared hit=791 read=72735
+                    Worker 0:  Sort Method: quicksort  Memory: 25kB
+                    Worker 1:  Sort Method: quicksort  Memory: 25kB
+                    ->  Partial HashAggregate  (cost=158334.12..158334.19 rows=6 width=45) (actual time=490.606..490.608 rows=6 loops=3)
+                          Group Key: m.message_type
+                          Batches: 1  Memory Usage: 24kB
+                          Buffers: shared hit=775 read=72735
+                          Worker 0:  Batches: 1  Memory Usage: 24kB
+                          Worker 1:  Batches: 1  Memory Usage: 24kB
+                          ->  Parallel Hash Join  (cost=34492.79..155739.04 rows=173005 width=21) (actual time=436.043..466.672 rows=136534 loops=3)
+                                Hash Cond: (r.message_id = m.message_id)
+                                Buffers: shared hit=775 read=72735
+                                ->  Parallel Seq Scan on message_receipts r  (cost=0.00..113088.45 rows=3107731 width=16) (actual time=0.014..326.335 rows=2481871 loops=3)
+                                      Filter: (read_at IS NOT NULL)
+                                      Rows Removed by Filter: 858867
+                                      Buffers: shared hit=233 read=71083
+                                ->  Parallel Hash  (cost=33796.93..33796.93 rows=55669 width=21) (actual time=26.965..26.966 rows=43956 loops=3)
+                                      Buckets: 262144  Batches: 1  Memory Usage: 9376kB
+                                      Buffers: shared hit=512 read=1652
+                                      ->  Parallel Bitmap Heap Scan on messages m  (cost=3425.89..33796.93 rows=55669 width=21) (actual time=3.620..23.384 rows=43956 loops=3)
+                                            Recheck Cond: ((sent_at >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (sent_at < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                                            Heap Blocks: exact=559
+                                            Buffers: shared hit=512 read=1652
+                                            ->  Bitmap Index Scan on idx_messages_sent_at_sender  (cost=0.00..3392.49 rows=133606 width=0) (actual time=5.452..5.452 rows=131868 loops=1)
+                                                  Index Cond: ((sent_at >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (sent_at < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                                                  Buffers: shared hit=508
+Planning:
+  Buffers: shared hit=404 read=2
+Planning Time: 0.734 ms
+Execution Time: 493.968 ms
+=== R17 run 2 ===
+Sort  (cost=159335.98..159336.00 rows=6 width=45) (actual time=251.243..252.024 rows=6 loops=1)
+  Sort Key: (round(avg((EXTRACT(epoch FROM (r.read_at - m.sent_at)) / '60'::numeric)), 1))
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=2542 read=70987
+  ->  Finalize GroupAggregate  (cost=159334.29..159335.90 rows=6 width=45) (actual time=251.228..252.016 rows=6 loops=1)
+        Group Key: m.message_type
+        Buffers: shared hit=2539 read=70987
+        ->  Gather Merge  (cost=159334.29..159335.69 rows=12 width=45) (actual time=251.220..252.004 rows=18 loops=1)
+              Workers Planned: 2
+              Workers Launched: 2
+              Buffers: shared hit=2539 read=70987
+              ->  Sort  (cost=158334.27..158334.28 rows=6 width=45) (actual time=249.993..249.994 rows=6 loops=3)
+                    Sort Key: m.message_type
+                    Sort Method: quicksort  Memory: 25kB
+                    Buffers: shared hit=2539 read=70987
+                    Worker 0:  Sort Method: quicksort  Memory: 25kB
+                    Worker 1:  Sort Method: quicksort  Memory: 25kB
+                    ->  Partial HashAggregate  (cost=158334.12..158334.19 rows=6 width=45) (actual time=249.975..249.976 rows=6 loops=3)
+                          Group Key: m.message_type
+                          Batches: 1  Memory Usage: 24kB
+                          Buffers: shared hit=2523 read=70987
+                          Worker 0:  Batches: 1  Memory Usage: 24kB
+                          Worker 1:  Batches: 1  Memory Usage: 24kB
+                          ->  Parallel Hash Join  (cost=34492.79..155739.04 rows=173005 width=21) (actual time=210.437..228.306 rows=136534 loops=3)
+                                Hash Cond: (r.message_id = m.message_id)
+                                Buffers: shared hit=2523 read=70987
+                                ->  Parallel Seq Scan on message_receipts r  (cost=0.00..113088.45 rows=3107731 width=16) (actual time=0.021..122.299 rows=2481871 loops=3)
+                                      Filter: (read_at IS NOT NULL)
+                                      Rows Removed by Filter: 858867
+                                      Buffers: shared hit=329 read=70987
+                                ->  Parallel Hash  (cost=33796.93..33796.93 rows=55669 width=21) (actual time=7.116..7.116 rows=43956 loops=3)
+                                      Buckets: 262144  Batches: 1  Memory Usage: 9344kB
+                                      Buffers: shared hit=2164
+                                      ->  Parallel Bitmap Heap Scan on messages m  (cost=3425.89..33796.93 rows=55669 width=21) (actual time=1.439..4.107 rows=43956 loops=3)
+                                            Recheck Cond: ((sent_at >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (sent_at < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                                            Heap Blocks: exact=591
+                                            Buffers: shared hit=2164
+                                            ->  Bitmap Index Scan on idx_messages_sent_at_sender  (cost=0.00..3392.49 rows=133606 width=0) (actual time=2.321..2.321 rows=131868 loops=1)
+                                                  Index Cond: ((sent_at >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (sent_at < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                                                  Buffers: shared hit=508
+Planning:
+  Buffers: shared hit=406
+Planning Time: 0.577 ms
+Execution Time: 252.068 ms
+=== R17 run 3 ===
+Sort  (cost=159335.98..159336.00 rows=6 width=45) (actual time=235.287..236.065 rows=6 loops=1)
+  Sort Key: (round(avg((EXTRACT(epoch FROM (r.read_at - m.sent_at)) / '60'::numeric)), 1))
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=2638 read=70891
+  ->  Finalize GroupAggregate  (cost=159334.29..159335.90 rows=6 width=45) (actual time=235.274..236.058 rows=6 loops=1)
+        Group Key: m.message_type
+        Buffers: shared hit=2635 read=70891
+        ->  Gather Merge  (cost=159334.29..159335.69 rows=12 width=45) (actual time=235.268..236.049 rows=18 loops=1)
+              Workers Planned: 2
+              Workers Launched: 2
+              Buffers: shared hit=2635 read=70891
+              ->  Sort  (cost=158334.27..158334.28 rows=6 width=45) (actual time=233.881..233.882 rows=6 loops=3)
+                    Sort Key: m.message_type
+                    Sort Method: quicksort  Memory: 25kB
+                    Buffers: shared hit=2635 read=70891
+                    Worker 0:  Sort Method: quicksort  Memory: 25kB
+                    Worker 1:  Sort Method: quicksort  Memory: 25kB
+                    ->  Partial HashAggregate  (cost=158334.12..158334.19 rows=6 width=45) (actual time=233.863..233.865 rows=6 loops=3)
+                          Group Key: m.message_type
+                          Batches: 1  Memory Usage: 24kB
+                          Buffers: shared hit=2619 read=70891
+                          Worker 0:  Batches: 1  Memory Usage: 24kB
+                          Worker 1:  Batches: 1  Memory Usage: 24kB
+                          ->  Parallel Hash Join  (cost=34492.79..155739.04 rows=173005 width=21) (actual time=194.600..211.639 rows=136534 loops=3)
+                                Hash Cond: (r.message_id = m.message_id)
+                                Buffers: shared hit=2619 read=70891
+                                ->  Parallel Seq Scan on message_receipts r  (cost=0.00..113088.45 rows=3107731 width=16) (actual time=0.023..117.282 rows=2481871 loops=3)
+                                      Filter: (read_at IS NOT NULL)
+                                      Rows Removed by Filter: 858867
+                                      Buffers: shared hit=425 read=70891
+                                ->  Parallel Hash  (cost=33796.93..33796.93 rows=55669 width=21) (actual time=7.236..7.237 rows=43956 loops=3)
+                                      Buckets: 262144  Batches: 1  Memory Usage: 9376kB
+                                      Buffers: shared hit=2164
+                                      ->  Parallel Bitmap Heap Scan on messages m  (cost=3425.89..33796.93 rows=55669 width=21) (actual time=1.526..4.245 rows=43956 loops=3)
+                                            Recheck Cond: ((sent_at >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (sent_at < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                                            Heap Blocks: exact=567
+                                            Buffers: shared hit=2164
+                                            ->  Bitmap Index Scan on idx_messages_sent_at_sender  (cost=0.00..3392.49 rows=133606 width=0) (actual time=2.568..2.568 rows=131868 loops=1)
+                                                  Index Cond: ((sent_at >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (sent_at < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                                                  Buffers: shared hit=508
+Planning:
+  Buffers: shared hit=406
+Planning Time: 0.652 ms
+Execution Time: 236.112 ms

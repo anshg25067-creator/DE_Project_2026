@@ -6,6 +6,7 @@ SET search_path TO whatsapp;
 -- Original workload: queries/workload_30.sql
 -- ============================================================
 
+-- @R01
 -- R01: Chats screen - latest message per active chat
 SELECT
     cm.chat_id,
@@ -27,6 +28,7 @@ WHERE cm.user_id = 965
 ORDER BY last_msg.sent_at DESC;
 
 
+-- @R02
 -- R02: Latest 50 messages of group 22556
 SELECT
     message_id, sender_id, sent_at,
@@ -37,6 +39,7 @@ ORDER BY sent_at DESC
 LIMIT 50;
 
 
+-- @R03
 -- R03: Unread message counts per chat
 SELECT
     m.chat_id,
@@ -49,6 +52,7 @@ GROUP BY m.chat_id
 ORDER BY unread DESC;
 
 
+-- @R04
 -- R04: Search messages containing meeting
 SELECT
     m.chat_id, m.message_id, m.sent_at, m.body
@@ -61,12 +65,14 @@ ORDER BY m.sent_at DESC
 LIMIT 20;
 
 
+-- @R05
 -- R05: Phone number lookup
 SELECT user_id, display_name, status
 FROM users
 WHERE phone_e164 = '+919000000965';
 
 
+-- @R06
 -- R06: Last seen of direct chat contacts
 SELECT
     u.user_id,
@@ -85,6 +91,7 @@ WHERE me.user_id = 965
 ORDER BY u.last_seen_at DESC NULLS LAST;
 
 
+-- @R07
 -- R07: Current group members
 SELECT
     cm.user_id,
@@ -98,6 +105,7 @@ WHERE cm.chat_id = 22556
 ORDER BY cm.role, u.display_name;
 
 
+-- @R08
 -- R08: Undelivered receipts before cutoff
 SELECT
     r.message_id,
@@ -111,6 +119,7 @@ ORDER BY m.sent_at
 LIMIT 500;
 
 
+-- @R09
 -- R09: Top 20 users by total media uploaded
 SELECT
     uploader_id,
@@ -122,6 +131,7 @@ ORDER BY SUM(size_bytes) DESC
 LIMIT 20;
 
 
+-- @R10
 -- R10: Daily active senders in June 2026
 SELECT
     sent_at::date AS day,
@@ -134,6 +144,7 @@ GROUP BY sent_at::date
 ORDER BY day;
 
 
+-- @R11
 -- R11: Missed calls received by user 965 since January 2025
 SELECT
     c.call_id,
@@ -153,6 +164,7 @@ WHERE c.status = 'MISSED'
 ORDER BY c.started_at DESC;
 
 
+-- @R12
 -- R12: Users forwarding at least two messages on the same day
 SELECT
     sender_id,

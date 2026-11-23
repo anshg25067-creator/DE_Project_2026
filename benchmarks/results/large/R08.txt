@@ -1,0 +1,57 @@
+=== R08 run 1 ===
+Limit  (cost=1000.75..3884.86 rows=500 width=24) (actual time=25.136..27.806 rows=500 loops=1)
+  Buffers: shared hit=34435 read=430 dirtied=14
+  ->  Gather Merge  (cost=1000.75..585022.35 rows=101248 width=24) (actual time=25.136..27.775 rows=500 loops=1)
+        Workers Planned: 2
+        Workers Launched: 2
+        Buffers: shared hit=34435 read=430 dirtied=14
+        ->  Nested Loop  (cost=0.72..572335.79 rows=42187 width=24) (actual time=1.417..12.875 rows=245 loops=3)
+              Buffers: shared hit=34435 read=430 dirtied=14
+              ->  Parallel Index Scan using idx_messages_sent_at_sender on messages m  (cost=0.43..133224.78 rows=999920 width=16) (actual time=0.302..2.106 rows=5706 loops=3)
+                    Index Cond: (sent_at < '2026-06-30 23:00:00+05:30'::timestamp with time zone)
+                    Buffers: shared hit=62 read=281
+              ->  Index Scan using idx_receipts_undelivered on message_receipts r  (cost=0.29..0.43 rows=1 width=16) (actual time=0.002..0.002 rows=0 loops=17118)
+                    Index Cond: (message_id = m.message_id)
+                    Buffers: shared hit=34373 read=149 dirtied=14
+Planning:
+  Buffers: shared hit=350 dirtied=1
+Planning Time: 1.186 ms
+Execution Time: 27.859 ms
+=== R08 run 2 ===
+Limit  (cost=1000.75..3884.86 rows=500 width=24) (actual time=10.906..11.661 rows=500 loops=1)
+  Buffers: shared hit=34771
+  ->  Gather Merge  (cost=1000.75..585022.35 rows=101248 width=24) (actual time=10.905..11.643 rows=500 loops=1)
+        Workers Planned: 2
+        Workers Launched: 2
+        Buffers: shared hit=34771
+        ->  Nested Loop  (cost=0.72..572335.79 rows=42187 width=24) (actual time=0.152..4.164 rows=245 loops=3)
+              Buffers: shared hit=34771
+              ->  Parallel Index Scan using idx_messages_sent_at_sender on messages m  (cost=0.43..133224.78 rows=999920 width=16) (actual time=0.038..0.645 rows=5706 loops=3)
+                    Index Cond: (sent_at < '2026-06-30 23:00:00+05:30'::timestamp with time zone)
+                    Buffers: shared hit=345
+              ->  Index Scan using idx_receipts_undelivered on message_receipts r  (cost=0.29..0.43 rows=1 width=16) (actual time=0.001..0.001 rows=0 loops=17118)
+                    Index Cond: (message_id = m.message_id)
+                    Buffers: shared hit=34426
+Planning:
+  Buffers: shared hit=347
+Planning Time: 1.581 ms
+Execution Time: 11.715 ms
+=== R08 run 3 ===
+Limit  (cost=1000.75..3884.86 rows=500 width=24) (actual time=8.917..9.953 rows=500 loops=1)
+  Buffers: shared hit=36455 read=16
+  ->  Gather Merge  (cost=1000.75..585022.35 rows=101248 width=24) (actual time=8.916..9.935 rows=500 loops=1)
+        Workers Planned: 2
+        Workers Launched: 2
+        Buffers: shared hit=36455 read=16
+        ->  Nested Loop  (cost=0.72..572335.79 rows=42187 width=24) (actual time=0.061..4.425 rows=251 loops=3)
+              Buffers: shared hit=36455 read=16
+              ->  Parallel Index Scan using idx_messages_sent_at_sender on messages m  (cost=0.43..133224.78 rows=999920 width=16) (actual time=0.008..0.621 rows=5987 loops=3)
+                    Index Cond: (sent_at < '2026-06-30 23:00:00+05:30'::timestamp with time zone)
+                    Buffers: shared hit=345 read=12
+              ->  Index Scan using idx_receipts_undelivered on message_receipts r  (cost=0.29..0.43 rows=1 width=16) (actual time=0.001..0.001 rows=0 loops=17960)
+                    Index Cond: (message_id = m.message_id)
+                    Buffers: shared hit=36110 read=4
+Planning:
+  Buffers: shared hit=347
+Planning Time: 1.598 ms
+Execution Time: 10.033 ms
